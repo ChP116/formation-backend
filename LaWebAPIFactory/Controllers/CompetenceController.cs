@@ -24,14 +24,14 @@ namespace LaWebAPIFactory.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Competence>> Get()
         {
-            return _context.Competences.ToList();
+            return _context.Competences.Include(c => c.Matiere).ToList();
         }
 
         // GET api/<CompetenceController>/5
         [HttpGet("{formateurId}/{matiereId}")]
         public ActionResult<Competence> Get(int formateurId, int matiereId)
         {
-            var competence = _context.Competences.Where(c => c.FormateurId == formateurId && c.MatiereId == matiereId).SingleOrDefault();
+            var competence = _context.Competences.Where(c => c.FormateurId == formateurId && c.MatiereId == matiereId).Include(c=>c.Matiere).SingleOrDefault();
 
             if (competence == null)
             {
@@ -81,7 +81,7 @@ namespace LaWebAPIFactory.Controllers
             return Ok();
         }
 
-        // DELETE api/<FormateurController>/5
+        
         [HttpDelete("{formateurId}/{matiereId}")]
         public IActionResult Delete(int formateurId, int matiereId)
         {
@@ -96,6 +96,26 @@ namespace LaWebAPIFactory.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{formateurId}")]
+        public IActionResult DeleteByF(int formateurId)
+        {
+            var competences = _context.Competences.Where(c=>c.FormateurId==formateurId);
+            if (competences == null)
+            {
+                return NotFound();
+            }
+            foreach (var c in competences)
+            {
+                _context.Competences.Remove(c);
+            }
+            
+            _context.SaveChanges();
+
+            return NoContent();
+        }
+
+
 
         private bool CompetenceExists(int formateurId, int matiereId)
         {

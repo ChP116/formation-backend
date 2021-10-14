@@ -25,7 +25,7 @@ namespace LaWebAPIFactory.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Matiere>> Get()
         {
-            return _context.Matieres.ToList();
+            return _context.Matieres.Include(m => m.Competences).ToList();
         }
 
         // GET api/<MatiereController>/5
