@@ -12,7 +12,6 @@ namespace LaWebAPIFactory.Models
         public int MatiereId { get; set; }
         [JsonIgnore]
         public Formateur Formateur { get; set; }
-        
         public Matiere Matiere { get; set; }
 
         public Competence()
