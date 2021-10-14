@@ -23,6 +23,8 @@ namespace LaWebAPIFactory
 
         public IConfiguration Configuration { get; }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -33,6 +35,17 @@ namespace LaWebAPIFactory
             services.AddScoped<IMatiereDao, MatiereDaoEF>();
 
             services.AddControllersWithViews();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:4200")
+                                                .AllowAnyHeader()
+                                                .AllowAnyMethod();
+                                  });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +64,8 @@ namespace LaWebAPIFactory
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {

@@ -123,7 +123,7 @@ namespace LaWebAPIFactory.Context
 
             modelBuilder.Entity<Cursus>()
               .Property(c => c.GestionnaireId)
-              .HasColumnName("Manager_Id");
+              .HasColumnName("ManagerId");
 
             modelBuilder.Entity<Cursus>()
               .HasOne(c => c.Gestionnaire)
